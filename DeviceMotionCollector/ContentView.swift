@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var phoneViewModel = PhoneViewModel()
-    @State var reachable = "No"
+    @State var reachable = "No" // 연결 상태 확인
     
     @State private var selectedFrequency = 9
     let HzOptions = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
