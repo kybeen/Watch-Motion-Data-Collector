@@ -18,6 +18,7 @@ class WatchViewModel: NSObject, WCSessionDelegate, ObservableObject {
     }
     
     @Published var hzValue = 100
+    @Published var isSuccess = false
     
     //MARK: 델리게이트 메서드
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
@@ -28,6 +29,7 @@ class WatchViewModel: NSObject, WCSessionDelegate, ObservableObject {
         DispatchQueue.main.async {
             // 받아온 데이터 저장
             self.hzValue = userInfo["hz"] as? Int ?? 100
+            self.isSuccess = userInfo["isSuccess"] as? Bool ?? false
         }
     }
 }

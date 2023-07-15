@@ -30,6 +30,7 @@ struct RightHandView: View {
     @State var activityLabel = "포핸드"
     @State var handType = "right_"
     @State var num = 1
+    @State var isDetecting = true
     
     var body: some View {
         if isRightShowingGuide {
@@ -79,6 +80,7 @@ struct RightHandView: View {
                         Button("Stop") {
                             stopRecording()
                             isUpdating = false
+                            isDetecting = false
                         }.foregroundColor(.red)
                     }
                     else {
@@ -87,6 +89,7 @@ struct RightHandView: View {
                             startRecording()
                             isUpdating = true
                             isSentCSV = false
+                            isDetecting = true
                         }.foregroundColor(.green)
                     }
                 }
@@ -95,7 +98,16 @@ struct RightHandView: View {
                     Text("오른손잡이").foregroundColor(.purple).font(.headline).bold()
                     //MARK: 전송 완료 시 전송완료 메세지
                     if isSentCSV {
-                        Text("전송완료!!!").bold().foregroundColor(.blue)
+                        HStack {
+                            if isDetecting == false {
+                                Text("전송!").bold().foregroundColor(.blue)
+                                if watchViewModel.isSuccess {
+                                    Text("성공").bold().foregroundColor(.green)
+                                } else {
+                                    Text("실패").bold().foregroundColor(.red)
+                                }
+                            }
+                        }
                     }
                 }
             }
