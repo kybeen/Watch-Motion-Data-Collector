@@ -10,8 +10,7 @@ import CoreMotion
 
 struct LeftHandView: View {
     let motionManager = CMMotionManager()
-//    @ObservedObject var watchViewModel: WatchViewModel
-    @ObservedObject var watchViewModel = WatchViewModel()
+    @ObservedObject var watchViewModel: WatchViewModel
     
     //MARK: 모션 데이터 값
     @State var timestamp: Double = 0.0
