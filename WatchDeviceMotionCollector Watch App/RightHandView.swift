@@ -10,6 +10,7 @@ import CoreMotion
 
 struct RightHandView: View {
     let motionManager = CMMotionManager()
+//    @ObservedObject var watchViewModel: WatchViewModel
     @ObservedObject var watchViewModel = WatchViewModel()
     
     //MARK: 모션 데이터 값
@@ -31,6 +32,7 @@ struct RightHandView: View {
     @State var handType = "right_"
     @State var num = 1
     @State var isDetecting = true
+    @State var isShowingModal = false // 저장하기 전 한 번 더 확인하기 위한 메세지
     
     var body: some View {
         if isRightShowingGuide {
@@ -81,6 +83,7 @@ struct RightHandView: View {
                             stopRecording()
                             isUpdating = false
                             isDetecting = false
+                            isShowingModal = true
                         }.foregroundColor(.red)
                     }
                     else {
@@ -112,6 +115,23 @@ struct RightHandView: View {
                 }
             }
             .padding()
+            .fullScreenCover(isPresented: $isShowingModal) {
+                VStack {
+                    Text("정말로 저장하시겠습니까?")
+                    Button {
+                        isShowingModal = false
+                        // .csv 파일로 만들고 전송
+                        saveAndSendToCSV()
+                    } label: {
+                        Text("네")
+                    }
+                    Button {
+                        isShowingModal = false
+                    } label: {
+                        Text("아니오").foregroundColor(.red)
+                    }
+                }
+            }
         }
     }
 }
@@ -165,8 +185,6 @@ extension RightHandView {
     //MARK: Device Motion 레코딩 종료 함수
     func stopRecording() {
         motionManager.stopDeviceMotionUpdates()
-        // .csv 파일로 만들고 전송
-        saveAndSendToCSV()
     }
     
     //MARK: CSV 파일 만들고 아이폰으로 전송해주는 함수
