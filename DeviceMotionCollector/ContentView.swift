@@ -80,34 +80,16 @@ struct ContentView: View {
                 if csvFolderIndex == 0 {
                     SavedCSVFilesView(
                         savedCSVFiles: $phoneViewModel.leftSavedCSV,
-                        selectedCSVFiles: $leftSelectedCSVFiles
+                        selectedCSVFiles: $leftSelectedCSVFiles,
+                        hand: "left"
                     )
                 } else {
                     SavedCSVFilesView(
                         savedCSVFiles: $phoneViewModel.rightSavedCSV,
-                        selectedCSVFiles: $rightSelectedCSVFiles
+                        selectedCSVFiles: $rightSelectedCSVFiles,
+                        hand: "right"
                     )
                 }
-//                List {
-//                    Section(header: Text("Saved Files")) {
-//                        if csvFolderIndex == 0 {
-//                            //MARK: 왼손잡이 데이터
-//                            if let savedCSVFiles = phoneViewModel.leftSavedCSV {
-//                                ForEach(savedCSVFiles, id: \.self) { savedCSVFile in
-//                                    Text(savedCSVFile)
-//                                }
-//                            }
-//                        } else {
-//                            //MARK: 오른손잡이 데이터
-//                            if let savedCSVFiles = phoneViewModel.rightSavedCSV {
-//                                ForEach(savedCSVFiles, id: \.self) { savedCSVFile in
-//                                    Text(savedCSVFile)
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//                .cornerRadius(10)
             }
             .padding()
         }

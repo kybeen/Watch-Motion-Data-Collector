@@ -10,6 +10,7 @@ import SwiftUI
 struct SavedCSVFilesView: View {
     @Binding var savedCSVFiles: [String] // 저장된 파일들
     @Binding var selectedCSVFiles: [String] // 선택된 파일들
+    let hand: String
     
     var body: some View {
         //MARK: 저장된 CSV 파일 목록
@@ -49,13 +50,50 @@ struct SavedCSVFilesView: View {
                 Spacer()
                 //MARK: 삭제 버튼
                 Button {
-                    print(selectedCSVFiles)
+                    deleteSelectedCSVFiles(hand: hand, selectedCSVFiles: selectedCSVFiles)
+                    selectedCSVFiles = []
+                    print("파일 선택 배열 초기화 : \(selectedCSVFiles)")
                 } label: {
                     Label("Delete", systemImage: "trash")
                         .foregroundColor(.red)
                 }
             }
         }
+    }
+}
+
+extension SavedCSVFilesView {
+    //MARK: CSV 파일 삭제 함수
+    func deleteSelectedCSVFiles(hand: String, selectedCSVFiles: [String]) {
+        let fileManager = FileManager.default // FileManager 인스턴스 생성
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0] // documents 디렉토리 경로 (계속 바뀌기 때문에 새로 불러와야 함)
+        var directoryName = "DeviceMotionData" // 디렉토리명
+        if hand == "left" {
+            directoryName += "/Lefthand"
+        } else {
+            directoryName += "/Righthand"
+        }
+        let directoryURL = documentsURL.appendingPathComponent(directoryName)
+        
+        for csvFile in selectedCSVFiles {
+            let fileURL = directoryURL.appendingPathComponent(csvFile)
+            do {
+                try fileManager.removeItem(at: fileURL)
+            } catch {
+                print("Failed to delete file: \(csvFile), error: \(error)")
+            }
+        }
+        
+        // 삭제 확인
+        var fileList : [String] = []
+        do {
+            fileList = try fileManager.contentsOfDirectory(atPath: directoryURL.path)
+        } catch {
+            print("[Error] : \(error.localizedDescription)")
+        }
+        print("\(directoryURL)의 경로에 남은 파일들입니다.")
+        print(fileList)
+        savedCSVFiles = fileList.sorted()
     }
 }
 
