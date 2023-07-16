@@ -45,108 +45,150 @@ class PhoneViewModel: NSObject, WCSessionDelegate, ObservableObject {
     func session(_ session: WCSession, didReceive file: WCSessionFile) {
         DispatchQueue.main.async {
             print("===========================================================")
-            // 전송된 파일의 메타데이터 확인
+            /* 전송된 파일의 메타데이터 확인 */
             self.csvFileName = file.metadata?["fileName"] as? String ?? "Unknown" // 파일명
             let fileName = file.metadata?["fileName"] as? String ?? "Unknown" // 파일명
             self.handType = file.metadata?["hand"] as? String ?? "Unknown"
-//            // 전송된 파일의 임시 경로
-//            let tempURL = file.fileURL
-//            print("temp URL: \(tempURL)")
+//            let tempURL = file.fileURL // 전송된 파일의 임시 경로
 
 
-            // 파일을 저장할 경로 설정
+            /* 파일을 저장할 경로 설정 */
             let fileManager = FileManager.default // FileManager 인스턴스 생성
             let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0] // documents 디렉토리 경로 (계속 바뀌기 때문에 새로 불러와야 함)
             print("documentsURL: \(documentsURL)")
-            let directoryName = "DeviceMotionData" // 디렉토리명
-
-            //MARK: 디렉토리 만들기
-            let leftDirectoryURL = documentsURL.appendingPathComponent(directoryName).appendingPathComponent("Lefthand")
-            let rightDirectoryURL = documentsURL.appendingPathComponent(directoryName).appendingPathComponent("Righthand")
-                //MARK: 왼쪽
-            if !fileManager.fileExists(atPath: leftDirectoryURL.path) {
-                do {
-                    try fileManager.createDirectory(atPath: leftDirectoryURL.path, withIntermediateDirectories: true, attributes: nil)
-                    print("DeviceMotionData/Lefthand 디렉토리 생성 완료!!! : \(leftDirectoryURL)")
-                } catch {
-                    NSLog("Couldn't create DeviceMotionData/Lefthand directory.")
-                }
-            } else {
-                print("Lefthand 디렉토리가 이미 존재하기 때문에 생성하지 않았습니다.\nDirectory URL : \(leftDirectoryURL)")
-            }
-                //MARK: 오른쪽
-            if !fileManager.fileExists(atPath: rightDirectoryURL.path) {
-                do {
-                    try fileManager.createDirectory(atPath: rightDirectoryURL.path, withIntermediateDirectories: true, attributes: nil)
-                    print("DeviceMotionData/Righthand 디렉토리 생성 완료!!! : \(rightDirectoryURL)")
-                } catch {
-                    NSLog("Couldn't create DeviceMotionData/Righthand directory.")
-                }
-            } else {
-                print("Righthand 디렉토리가 이미 존재하기 때문에 생성하지 않았습니다.\nDirectory URL : \(rightDirectoryURL)")
-            }
-            
-            //MARK: 파일 만들기
-            let leftCsvURL = leftDirectoryURL.appendingPathComponent(fileName) // 파일명이 포함된 파일 저장 경로
-            let rightCsvURL = rightDirectoryURL.appendingPathComponent(fileName) // 파일명이 포함된 파일 저장 경로
-                //MARK: 왼쪽
+            var directoryName = "DeviceMotionData" // 디렉토리명
             if self.handType == "left_" {
-                print("저장될 파일 경로 : \(leftCsvURL)")
-                // 파일 이동
+                directoryName += "/Lefthand"
+            } else {
+                directoryName += "/Righthand"
+            }
+            /* 디렉토리 만들기 */
+            let directoryURL = documentsURL.appendingPathComponent(directoryName)
+            if !fileManager.fileExists(atPath: directoryURL.path) {
                 do {
-                    // 저장 성공
-                    try fileManager.moveItem(at: file.fileURL, to: leftCsvURL)
-                    print("File saved!!! : \(fileName)")
-                    print("Received and saved CSV file!!! : \(leftCsvURL)")
-                    self.isSucceeded = "Success!!!"
-                    session.transferUserInfo(["isSuccess": true])
+                    try fileManager.createDirectory(atPath: directoryURL.path, withIntermediateDirectories: true, attributes: nil)
+                    print("\(directoryName) 디렉토리 생성 완료!!! : \(directoryURL)")
                 } catch {
-                    // 저장 실패
-                    print("Failed to save received CSV file. : \(error.localizedDescription)")
-                    self.isSucceeded = "Fail..."
-                    session.transferUserInfo(["isSuccess": false])
+                    NSLog("Couldn't create \(directoryName) directory.")
                 }
-                // 저장된 항목들 확인
-                var fileList : [String] = []
-                do {
-                    fileList = try fileManager.contentsOfDirectory(atPath: leftDirectoryURL.path)
-                }
-                catch {
-                    print("[Error] : \(error.localizedDescription)")
-                }
+            } else {
+                print("\(directoryName) 디렉토리가 이미 존재하기 때문에 생성하지 않았습니다.\nDirectory URL : \(directoryURL)")
+            }
+            /* 파일 만들기 */
+            let csvURL = directoryURL.appendingPathComponent(fileName) // 파일 저장 경로
+            print("저장될 파일 경로 : \(csvURL)")
+            do {
+                // 정상적으로 아이폰으로 파일 이동
+                try fileManager.moveItem(at: file.fileURL, to: csvURL)
+                print("File saved!!! : \(fileName)")
+                print("Received and saved CSV file!!! : \(csvURL)")
+                self.isSucceeded = "Success!!!"
+                session.transferUserInfo(["isSuccess": true])
+            } catch {
+                // 파일 이동 실패
+                print("Failed to save received CSV file. : \(error.localizedDescription)")
+                self.isSucceeded = "Fail..."
+                session.transferUserInfo(["isSuccess": false])
+            }
+            // 저장된 항목들 확인
+            var fileList : [String] = []
+            do {
+                fileList = try fileManager.contentsOfDirectory(atPath: directoryURL.path)
+            } catch {
+                print("[Error] : \(error.localizedDescription)")
+            }
+            if self.handType == "left_" {
                 self.leftSavedCSV = fileList.sorted()
-                print("디렉토리 내용 확인: \(self.leftSavedCSV!)")
-                print("===========================================================\n\n")
-            }
-            //MARK: 오른쪽
-            else {
-                print("저장될 파일 경로 : \(rightCsvURL)")
-                // 파일 이동
-                do {
-                    // 저장 성공
-                    try fileManager.moveItem(at: file.fileURL, to: rightCsvURL)
-                    print("File saved!!! : \(fileName)")
-                    print("Received and saved CSV file!!! : \(rightCsvURL)")
-                    self.isSucceeded = "Success!!!"
-                    session.transferUserInfo(["isSuccess": true])
-                } catch {
-                    // 저장 실패
-                    print("Failed to save received CSV file. : \(error.localizedDescription)")
-                    self.isSucceeded = "Fail..."
-                    session.transferUserInfo(["isSuccess": false])
-                }
-                // 저장된 항목들 확인
-                var fileList : [String] = []
-                do {
-                    fileList = try fileManager.contentsOfDirectory(atPath: rightDirectoryURL.path)
-                }
-                catch {
-                    print("[Error] : \(error.localizedDescription)")
-                }
+            } else {
                 self.rightSavedCSV = fileList.sorted()
-                print("디렉토리 내용 확인: \(self.rightSavedCSV!))")
-                print("===========================================================\n\n")
             }
+//            //MARK: 디렉토리 만들기
+//            let leftDirectoryURL = documentsURL.appendingPathComponent(directoryName).appendingPathComponent("Lefthand")
+//            let rightDirectoryURL = documentsURL.appendingPathComponent(directoryName).appendingPathComponent("Righthand")
+//            //MARK: 왼쪽
+//            if !fileManager.fileExists(atPath: leftDirectoryURL.path) {
+//                do {
+//                    try fileManager.createDirectory(atPath: leftDirectoryURL.path, withIntermediateDirectories: true, attributes: nil)
+//                    print("DeviceMotionData/Lefthand 디렉토리 생성 완료!!! : \(leftDirectoryURL)")
+//                } catch {
+//                    NSLog("Couldn't create DeviceMotionData/Lefthand directory.")
+//                }
+//            } else {
+//                print("Lefthand 디렉토리가 이미 존재하기 때문에 생성하지 않았습니다.\nDirectory URL : \(leftDirectoryURL)")
+//            }
+//                //MARK: 오른쪽
+//            if !fileManager.fileExists(atPath: rightDirectoryURL.path) {
+//                do {
+//                    try fileManager.createDirectory(atPath: rightDirectoryURL.path, withIntermediateDirectories: true, attributes: nil)
+//                    print("DeviceMotionData/Righthand 디렉토리 생성 완료!!! : \(rightDirectoryURL)")
+//                } catch {
+//                    NSLog("Couldn't create DeviceMotionData/Righthand directory.")
+//                }
+//            } else {
+//                print("Righthand 디렉토리가 이미 존재하기 때문에 생성하지 않았습니다.\nDirectory URL : \(rightDirectoryURL)")
+//            }
+            
+//            //MARK: 파일 만들기
+//            let leftCsvURL = leftDirectoryURL.appendingPathComponent(fileName) // 파일명이 포함된 파일 저장 경로
+//            let rightCsvURL = rightDirectoryURL.appendingPathComponent(fileName) // 파일명이 포함된 파일 저장 경로
+//                //MARK: 왼쪽
+//            if self.handType == "left_" {
+//                print("저장될 파일 경로 : \(leftCsvURL)")
+//                // 파일 이동
+//                do {
+//                    // 저장 성공
+//                    try fileManager.moveItem(at: file.fileURL, to: leftCsvURL)
+//                    print("File saved!!! : \(fileName)")
+//                    print("Received and saved CSV file!!! : \(leftCsvURL)")
+//                    self.isSucceeded = "Success!!!"
+//                    session.transferUserInfo(["isSuccess": true])
+//                } catch {
+//                    // 저장 실패
+//                    print("Failed to save received CSV file. : \(error.localizedDescription)")
+//                    self.isSucceeded = "Fail..."
+//                    session.transferUserInfo(["isSuccess": false])
+//                }
+//                // 저장된 항목들 확인
+//                var fileList : [String] = []
+//                do {
+//                    fileList = try fileManager.contentsOfDirectory(atPath: leftDirectoryURL.path)
+//                }
+//                catch {
+//                    print("[Error] : \(error.localizedDescription)")
+//                }
+//                self.leftSavedCSV = fileList.sorted()
+//                print("디렉토리 내용 확인: \(self.leftSavedCSV!)")
+//                print("===========================================================\n\n")
+//            }
+//            //MARK: 오른쪽
+//            else {
+//                print("저장될 파일 경로 : \(rightCsvURL)")
+//                // 파일 이동
+//                do {
+//                    // 저장 성공
+//                    try fileManager.moveItem(at: file.fileURL, to: rightCsvURL)
+//                    print("File saved!!! : \(fileName)")
+//                    print("Received and saved CSV file!!! : \(rightCsvURL)")
+//                    self.isSucceeded = "Success!!!"
+//                    session.transferUserInfo(["isSuccess": true])
+//                } catch {
+//                    // 저장 실패
+//                    print("Failed to save received CSV file. : \(error.localizedDescription)")
+//                    self.isSucceeded = "Fail..."
+//                    session.transferUserInfo(["isSuccess": false])
+//                }
+//                // 저장된 항목들 확인
+//                var fileList : [String] = []
+//                do {
+//                    fileList = try fileManager.contentsOfDirectory(atPath: rightDirectoryURL.path)
+//                }
+//                catch {
+//                    print("[Error] : \(error.localizedDescription)")
+//                }
+//                self.rightSavedCSV = fileList.sorted()
+//                print("디렉토리 내용 확인: \(self.rightSavedCSV!))")
+//                print("===========================================================\n\n")
+//            }
 
 
 //            if fileManager.fileExists(atPath: directoryURL.path) {

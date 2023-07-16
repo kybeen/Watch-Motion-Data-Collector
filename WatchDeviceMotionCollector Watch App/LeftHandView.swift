@@ -14,12 +14,6 @@ struct LeftHandView: View {
     
     //MARK: 모션 데이터 값
     @State var timestamp: Double = 0.0
-    @State var accelerationX: Double = 0.0
-    @State var accelerationY: Double = 0.0
-    @State var accelerationZ: Double = 0.0
-    @State var rotationRateX: Double = 0.0
-    @State var rotationRateY: Double = 0.0
-    @State var rotationRateZ: Double = 0.0
     //MARK: 동작 상태, 저장될 파일명 등에 대한 정보
     @State private var isUpdating = false
     @State var isSentCSV = false
@@ -145,13 +139,13 @@ extension LeftHandView {
         
         // Device Motion 수집 가능한지 확인
         guard motionManager.isDeviceMotionAvailable else {
-            print("Device motion data is not available!!!")
+            print("Device motion data is not available.")
             return
         }
         
         // 모션 갱신 주기 설정 (몇 초마다 모션 데이터를 업데이트 할 지)
         motionManager.deviceMotionUpdateInterval = TimeInterval(1 / watchViewModel.hzValue)
-        print("모션 갱신 주기(deviceMotionUpdateInterval) : \(watchViewModel.hzValue)Hz -> \(String(format: "%.2f", 1/watchViewModel.hzValue))")
+        print("모션 갱신 주기 설정 : \(watchViewModel.hzValue)Hz -> \(String(format: "%.2f", 1/watchViewModel.hzValue))")
         var startTime: TimeInterval = 0.0 //MARK: 시작 시간 저장 변수
         // Device Motion 업데이트 받기 시작
         motionManager.startDeviceMotionUpdates(to: queue) { (data, error) in
@@ -172,12 +166,6 @@ extension LeftHandView {
             print("Timestamp : \(timestamp)")
             
             self.timestamp = timestamp //MARK: UI 업데이트는 메인 큐에서 실행
-            self.accelerationX = acceleration.x
-            self.accelerationY = acceleration.y
-            self.accelerationZ = acceleration.z
-            self.rotationRateX = rotationRate.x
-            self.rotationRateY = rotationRate.y
-            self.rotationRateZ = rotationRate.z
         }
     }
     
@@ -220,12 +208,12 @@ extension LeftHandView {
             print("File name : \(csvFileName)")
         }
         catch let error as NSError {
-            print("Failed to save CSV file!!!: \(error.localizedDescription)")
+            print("Failed to save CSV file: \(error.localizedDescription)")
         }
         
         //MARK: CSV 파일 아이폰으로 전송
         watchViewModel.session.transferFile(csvURL, metadata: ["activity": activityType, "hand": handType, "fileName": csvFileName])
-        print("Send CSV file to iPhone.")
+        print("CSV파일이 아이폰으로 전송됨!!!")
         isSentCSV = true
     }
 }

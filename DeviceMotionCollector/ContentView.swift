@@ -102,50 +102,14 @@ struct ContentView: View {
         }
         .padding()
         .onAppear() {
-            // 처음 화면이 로드될 때 디렉토리 생성 체크하고, 저장된 CSV 파일들 목록을 불러옴
-            createDirectory()
+            // 처음 화면이 로드될 때 저장된 CSV 파일들 목록을 불러옴
+//            createDirectory()
             loadCSVFiles()
         }
     }
 }
 
 extension ContentView {
-    //MARK: CSV 파일을 저장할 디렉토리를 만드는 함수
-    func createDirectory() {
-        // 파일을 저장할 경로 설정
-        let fileManager = FileManager.default // FileManager 인스턴스 생성
-        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0] // documents 디렉토리 경로 (계속 바뀌기 때문에 새로 불러와야 함)
-        print("documentsURL: \(documentsURL)")
-        let directoryName = "DeviceMotionData" // 디렉토리명
-
-        // 디렉토리 만들기
-        let leftDirectoryURL = documentsURL.appendingPathComponent(directoryName).appendingPathComponent("Lefthand")
-        let rightDirectoryURL = documentsURL.appendingPathComponent(directoryName).appendingPathComponent("Righthand")
-        //MARK: DeviceMotionData 폴더가 이미 존재하는지 확인 후 생성
-        // 왼쪽
-        if !fileManager.fileExists(atPath: leftDirectoryURL.path) {
-            do {
-                try fileManager.createDirectory(atPath: leftDirectoryURL.path, withIntermediateDirectories: true, attributes: nil)
-                print("DeviceMotionData/Lefthand 디렉토리 생성 완료!!! : \(leftDirectoryURL)")
-            } catch {
-                NSLog("Couldn't create DeviceMotionData/Lefthand directory.")
-            }
-        } else {
-            print("Lefthand 디렉토리가 이미 존재하기 때문에 생성하지 않았습니다.\nDirectory URL : \(leftDirectoryURL)")
-        }
-        // 오른쪽
-        if !fileManager.fileExists(atPath: rightDirectoryURL.path) {
-            do {
-                try fileManager.createDirectory(atPath: rightDirectoryURL.path, withIntermediateDirectories: true, attributes: nil)
-                print("DeviceMotionData/Righthand 디렉토리 생성 완료!!! : \(rightDirectoryURL)")
-            } catch {
-                NSLog("Couldn't create DeviceMotionData/Righthand directory.")
-            }
-        } else {
-            print("Righthand 디렉토리가 이미 존재하기 때문에 생성하지 않았습니다.\nDirectory URL : \(rightDirectoryURL)")
-        }
-    }
-    
     //MARK: CSV 파일을 불러오는 함수
     func loadCSVFiles() {
         let fileManager = FileManager.default // FileManager 인스턴스 생성
@@ -165,7 +129,7 @@ extension ContentView {
             print("[Error] : \(error.localizedDescription)")
         }
         phoneViewModel.leftSavedCSV = leftFileList.sorted()
-        print("Lefthand 디렉토리 내용 확인: \(phoneViewModel.leftSavedCSV!)")
+//        print("Lefthand 디렉토리 내용 확인: \(phoneViewModel.leftSavedCSV!)")
         
         do {
             rightFileList = try FileManager.default.contentsOfDirectory(atPath: rightDirectoryURL.path)
@@ -174,7 +138,7 @@ extension ContentView {
             print("[Error] : \(error.localizedDescription)")
         }
         phoneViewModel.rightSavedCSV = rightFileList.sorted()
-        print("Righthand 디렉토리 내용 확인: \(phoneViewModel.rightSavedCSV!)")
+//        print("Righthand 디렉토리 내용 확인: \(phoneViewModel.rightSavedCSV!)")
     }
 }
 
