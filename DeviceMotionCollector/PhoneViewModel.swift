@@ -20,8 +20,8 @@ class PhoneViewModel: NSObject, WCSessionDelegate, ObservableObject {
     @Published var csvFileName = ""
     @Published var handType = "left_"
     @Published var isSucceeded = "Fail..."
-    @Published var leftSavedCSV: [String]?
-    @Published var rightSavedCSV: [String]?
+    @Published var leftSavedCSV: [String] = []
+    @Published var rightSavedCSV: [String] = []
     
     //MARK: 델리게이트 메서드 3개 정의
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
@@ -50,7 +50,6 @@ class PhoneViewModel: NSObject, WCSessionDelegate, ObservableObject {
             let fileName = file.metadata?["fileName"] as? String ?? "Unknown" // 파일명
             self.handType = file.metadata?["hand"] as? String ?? "Unknown"
 //            let tempURL = file.fileURL // 전송된 파일의 임시 경로
-
 
             /* 파일을 저장할 경로 설정 */
             let fileManager = FileManager.default // FileManager 인스턴스 생성

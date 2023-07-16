@@ -14,11 +14,14 @@ struct ContentView: View {
     @State private var selectedFrequency = 9
     let HzOptions = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     @State private var csvFolderIndex = 0
+    @State private var leftSelectedCSVFiles: [String] = [] // 선택된 파일들 (삭제용)
+    @State private var rightSelectedCSVFiles: [String] = [] // 선택된 파일들 (삭제용)
     
     var body: some View {
         VStack(alignment: .leading) {
+            //MARK: Frequency 선택
             HStack(alignment: .top) {
-                Text("Frequency select").font(.title).bold()
+                Text("Frequency select").font(.title2).bold()
                 Spacer()
                 Picker("Frequency", selection: $selectedFrequency) {
                     ForEach(0..<HzOptions.count) { index in
@@ -32,11 +35,13 @@ struct ContentView: View {
             }
             .padding()
             
+            //MARK: 워치 데이터 수신 확인
             VStack(alignment: .leading) {
                 HStack {
                     Text("Received\ndata").font(.title).bold()
                     Spacer()
-                    VStack {
+                    HStack {
+                        Text("Reachable: \(reachable)")
                         Button("Update") {
                             if self.phoneViewModel.session.isReachable {
                                 self.reachable = "Yes"
@@ -46,12 +51,7 @@ struct ContentView: View {
                                 print("NO...")
                             }
                         }
-                        .padding(5)
-                        .background(.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(5)
-                        
-                        Text("Reachable: \(reachable)")
+                        .bold()
                     }
                 }
                 HStack {
@@ -63,7 +63,7 @@ struct ContentView: View {
             
             VStack(alignment: .leading) {
                 HStack {
-                    Text("Saved\ndata").font(.title).bold()
+                    Text("Saved data").font(.title).bold()
                     Spacer()
                     Text("Save Status :")
                     Text(phoneViewModel.isSucceeded)
@@ -75,28 +75,39 @@ struct ContentView: View {
                     Text("Right").tag(1)
                 }
                 .pickerStyle(.segmented)
-                
-                
-                List {
-                    Section(header: Text("Saved Files")) {
-                        if csvFolderIndex == 0 {
-                            //MARK: 왼손잡이 데이터
-                            if let savedCSVFiles = phoneViewModel.leftSavedCSV {
-                                ForEach(savedCSVFiles, id: \.self) { savedCSVFile in
-                                    Text(savedCSVFile)
-                                }
-                            }
-                        } else {
-                            //MARK: 오른손잡이 데이터
-                            if let savedCSVFiles = phoneViewModel.rightSavedCSV {
-                                ForEach(savedCSVFiles, id: \.self) { savedCSVFile in
-                                    Text(savedCSVFile)
-                                }
-                            }
-                        }
-                    }
+  
+                //MARK: 저장된 파일 목록
+                if csvFolderIndex == 0 {
+                    SavedCSVFilesView(
+                        savedCSVFiles: $phoneViewModel.leftSavedCSV,
+                        selectedCSVFiles: $leftSelectedCSVFiles
+                    )
+                } else {
+                    SavedCSVFilesView(
+                        savedCSVFiles: $phoneViewModel.rightSavedCSV,
+                        selectedCSVFiles: $rightSelectedCSVFiles
+                    )
                 }
-                .cornerRadius(10)
+//                List {
+//                    Section(header: Text("Saved Files")) {
+//                        if csvFolderIndex == 0 {
+//                            //MARK: 왼손잡이 데이터
+//                            if let savedCSVFiles = phoneViewModel.leftSavedCSV {
+//                                ForEach(savedCSVFiles, id: \.self) { savedCSVFile in
+//                                    Text(savedCSVFile)
+//                                }
+//                            }
+//                        } else {
+//                            //MARK: 오른손잡이 데이터
+//                            if let savedCSVFiles = phoneViewModel.rightSavedCSV {
+//                                ForEach(savedCSVFiles, id: \.self) { savedCSVFile in
+//                                    Text(savedCSVFile)
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                .cornerRadius(10)
             }
             .padding()
         }
