@@ -103,7 +103,6 @@ struct ContentView: View {
         .padding()
         .onAppear() {
             // 처음 화면이 로드될 때 저장된 CSV 파일들 목록을 불러옴
-//            createDirectory()
             loadCSVFiles()
         }
     }
@@ -129,7 +128,6 @@ extension ContentView {
             print("[Error] : \(error.localizedDescription)")
         }
         phoneViewModel.leftSavedCSV = leftFileList.sorted()
-//        print("Lefthand 디렉토리 내용 확인: \(phoneViewModel.leftSavedCSV!)")
         
         do {
             rightFileList = try FileManager.default.contentsOfDirectory(atPath: rightDirectoryURL.path)
@@ -138,7 +136,6 @@ extension ContentView {
             print("[Error] : \(error.localizedDescription)")
         }
         phoneViewModel.rightSavedCSV = rightFileList.sorted()
-//        print("Righthand 디렉토리 내용 확인: \(phoneViewModel.rightSavedCSV!)")
     }
 }
 
