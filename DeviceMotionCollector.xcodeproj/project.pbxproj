@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B84F4DAA2A63E8DD0030A93C /* DetectingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84F4DA92A63E8DD0030A93C /* DetectingView.swift */; };
 		B8FEBA2D2A59934E00EB6464 /* DeviceMotionCollectorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8FEBA2C2A59934E00EB6464 /* DeviceMotionCollectorApp.swift */; };
 		B8FEBA2F2A59934E00EB6464 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8FEBA2E2A59934E00EB6464 /* ContentView.swift */; };
 		B8FEBA312A59934F00EB6464 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B8FEBA302A59934F00EB6464 /* Assets.xcassets */; };
@@ -47,6 +48,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B84F4DA92A63E8DD0030A93C /* DetectingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectingView.swift; sourceTree = "<group>"; };
 		B8FEBA292A59934E00EB6464 /* DeviceMotionCollector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeviceMotionCollector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8FEBA2C2A59934E00EB6464 /* DeviceMotionCollectorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceMotionCollectorApp.swift; sourceTree = "<group>"; };
 		B8FEBA2E2A59934E00EB6464 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				B8FEBA462A59936A00EB6464 /* Preview Content */,
 				B8FEBA542A5AFC2600EB6464 /* LeftHandView.swift */,
 				B8FEBA562A5AFC6800EB6464 /* RightHandView.swift */,
+				B84F4DA92A63E8DD0030A93C /* DetectingView.swift */,
 			);
 			path = "WatchDeviceMotionCollector Watch App";
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 			files = (
 				B8FEBA432A59936800EB6464 /* ContentView.swift in Sources */,
 				B8FEBA552A5AFC2600EB6464 /* LeftHandView.swift in Sources */,
+				B84F4DAA2A63E8DD0030A93C /* DetectingView.swift in Sources */,
 				B8FEBA412A59936800EB6464 /* WatchDeviceMotionCollectorApp.swift in Sources */,
 				B8FEBA532A59D34A00EB6464 /* WatchViewModel.swift in Sources */,
 				B8FEBA572A5AFC6800EB6464 /* RightHandView.swift in Sources */,

@@ -121,9 +121,6 @@ struct LeftHandView: View {
                         isShowingModal = false
                         // .csv 파일로 만들고 전송
                         saveAndSendToCSV()
-                        print("====================================")
-                        print("isSuccess: \(watchViewModel.isSuccess)")
-                        print("====================================")
                     } label: {
                         Text("네")
                     }

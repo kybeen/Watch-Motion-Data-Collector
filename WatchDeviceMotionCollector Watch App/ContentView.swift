@@ -18,6 +18,22 @@ struct ContentView: View {
             RightHandView(watchViewModel: watchViewModel, selectedTab: $selectedTab)
                 .tag(2)
         }
+//        TabView(selection: $selectedTab) {
+//            DetectingView(
+//                watchViewModel: watchViewModel,
+//                selectedTab: $selectedTab,
+//                handType: "left_",
+//                handTypeLabel: "왼손",
+//                activityLabel: "포핸드"
+//            ).tag(1)
+//            DetectingView(
+//                watchViewModel: watchViewModel,
+//                selectedTab: $selectedTab,
+//                handType: "right_",
+//                handTypeLabel: "오른손",
+//                activityLabel: "포핸드"
+//            ).tag(2)
+//        }
     }
 }
 
