@@ -18,6 +18,7 @@ struct ContentView: View {
             RightHandView(watchViewModel: watchViewModel, selectedTab: $selectedTab)
                 .tag(2)
         }
+
 //        TabView(selection: $selectedTab) {
 //            DetectingView(
 //                watchViewModel: watchViewModel,

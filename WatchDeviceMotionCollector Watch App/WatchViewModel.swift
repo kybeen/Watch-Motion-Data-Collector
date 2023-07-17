@@ -172,7 +172,7 @@ class WatchViewModel: NSObject, WCSessionDelegate, ObservableObject {
 
     @Published var hzValue = 100
     @Published var isSuccess = false
-    @Published var num = 1
+//    @Published var num = 1
 
     //MARK: 델리게이트 메서드
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
@@ -185,9 +185,9 @@ class WatchViewModel: NSObject, WCSessionDelegate, ObservableObject {
             self.hzValue = userInfo["hz"] as? Int ?? 100
             self.isSuccess = userInfo["isSuccess"] as? Bool ?? false
             
-            if self.isSuccess == true {
-                self.num += 1
-            }
+//            if self.isSuccess == true {
+//                self.num += 1
+//            }
         }
     }
 }
