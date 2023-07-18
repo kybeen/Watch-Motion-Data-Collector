@@ -82,12 +82,22 @@ class PhoneViewModel: NSObject, WCSessionDelegate, ObservableObject {
                 print("File saved!!! : \(fileName)")
                 print("Received and saved CSV file!!! : \(csvURL)")
                 self.isSucceeded = "Success!!!"
-                session.transferUserInfo(["isSuccess": true])
+//                session.transferUserInfo(["isSuccess": true])
+                if self.handType == "left_" {
+                    session.transferUserInfo(["leftIsSuccess": true])
+                } else {
+                    session.transferUserInfo(["rightIsSuccess": true])
+                }
             } catch {
                 // 파일 이동 실패
                 print("Failed to save received CSV file. : \(error.localizedDescription)")
                 self.isSucceeded = "Fail..."
-                session.transferUserInfo(["isSuccess": false])
+//                session.transferUserInfo(["isSuccess": false])
+                if self.handType == "left_" {
+                    session.transferUserInfo(["leftIsSuccess": false])
+                } else {
+                    session.transferUserInfo(["rightIsSuccess": false])
+                }
             }
             // 저장된 항목들 확인
             var fileList : [String] = []

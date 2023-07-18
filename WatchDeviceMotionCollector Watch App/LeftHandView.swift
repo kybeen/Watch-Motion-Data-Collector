@@ -23,7 +23,7 @@ struct LeftHandView: View {
     @State var activityType = "forehand_"
     @State var activityLabel = "포핸드"
     @State var handType = "left_"
-    @State var num = 1
+//    @State var num = 1
     @State var isDetecting = true
     @State var isShowingModal = false // 저장하기 전 한 번 더 확인하기 위한 메세지
     
@@ -37,7 +37,7 @@ struct LeftHandView: View {
         } else {
             VStack {
                 //MARK: 저장될 파일명 / 모션 데이터 frequency / 경과 시간 확인
-                Text("\(handType)\(activityType)\(num).csv").bold()
+                Text("\(handType)\(activityType)\(watchViewModel.leftNum).csv").bold()
                 HStack {
                     Text("\(watchViewModel.hzValue)Hz - ").bold().foregroundColor(.indigo)
                     Text("\(timestamp)") // 타임스탬프
@@ -45,13 +45,13 @@ struct LeftHandView: View {
                 HStack {
                     //MARK: 저장 파일명 번호 설정
                     Button("-") {
-                        if num > 1 {
-                            num -= 1
+                        if watchViewModel.leftNum > 1 {
+                            watchViewModel.leftNum -= 1
                         }
                     }.frame(width: 50, height: 50)
-                    Text("\(num)")
+                    Text("\(watchViewModel.leftNum)")
                     Button("+") {
-                        num += 1
+                        watchViewModel.leftNum += 1
                     }.frame(width: 50, height: 50)
                 }
                 HStack {
@@ -60,12 +60,12 @@ struct LeftHandView: View {
                         if activityType == "forehand_" {
                             activityType = "backhand_"
                             activityLabel = "백핸드"
-                            num = 1
+                            watchViewModel.leftNum = 1
                         }
                         else {
                             activityType = "forehand_"
                             activityLabel = "포핸드"
-                            num = 1
+                            watchViewModel.leftNum = 1
                         }
                     }
                     .foregroundColor(activityType=="forehand_" ? .orange : .purple)
@@ -97,7 +97,7 @@ struct LeftHandView: View {
                         HStack {
                             if isDetecting == false {
                                 Text("전송!").bold().foregroundColor(.blue)
-                                if watchViewModel.isSuccess {
+                                if watchViewModel.leftIsSuccess {
                                     Text("성공").bold().foregroundColor(.green)
                                 } else {
                                     Text("실패").bold().foregroundColor(.red)
@@ -116,7 +116,7 @@ struct LeftHandView: View {
                         // .csv 파일로 만들고 전송
                         saveAndSendToCSV()
                         print("====================================")
-                        print("isSuccess: \(watchViewModel.isSuccess)")
+                        print("leftIsSuccess: \(watchViewModel.leftIsSuccess)")
                         print("====================================")
                     } label: {
                         Text("네")
@@ -184,7 +184,7 @@ extension LeftHandView {
         // 폴더명 설정
         let folderName = "DeviceMotionData"
         // 파일명 설정
-        let csvFileName = self.handType + self.activityType + String(num) + ".csv"
+        let csvFileName = self.handType + self.activityType + String(watchViewModel.leftNum) + ".csv"
 
         //MARK: 폴더 생성
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
