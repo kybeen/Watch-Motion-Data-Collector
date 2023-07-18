@@ -32,6 +32,11 @@ struct ContentView: View {
                 .onChange(of: selectedFrequency) { newValue in
                     phoneViewModel.session.transferUserInfo(["hz": self.HzOptions[newValue]])
                 }
+                Button {
+                    phoneViewModel.session.transferUserInfo(["hz": self.HzOptions[selectedFrequency]])
+                } label: {
+                    Image(systemName: "arrow.clockwise").bold()
+                }
             }
             .padding()
             
@@ -42,7 +47,7 @@ struct ContentView: View {
                     Spacer()
                     HStack {
                         Text("Reachable: \(reachable)")
-                        Button("Update") {
+                        Button {
                             if self.phoneViewModel.session.isReachable {
                                 self.reachable = "Yes"
                                 print("YES!!!")
@@ -50,8 +55,9 @@ struct ContentView: View {
                                 self.reachable = "No"
                                 print("NO...")
                             }
+                        } label: {
+                            Image(systemName: "arrow.clockwise").bold()
                         }
-                        .bold()
                     }
                 }
                 HStack {

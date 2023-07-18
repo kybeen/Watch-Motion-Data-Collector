@@ -186,16 +186,20 @@ class WatchViewModel: NSObject, WCSessionDelegate, ObservableObject {
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
         DispatchQueue.main.async {
             // 받아온 데이터 저장
-            self.hzValue = userInfo["hz"] as? Int ?? 100
+            self.hzValue = userInfo["hz"] as? Int ?? self.hzValue
 //            self.isSuccess = userInfo["isSuccess"] as? Bool ?? false
-            self.leftIsSuccess = userInfo["leftIsSuccess"] as? Bool ?? false
-            self.rightIsSuccess = userInfo["rightIsSuccess"] as? Bool ?? false
+            self.leftIsSuccess = userInfo["leftIsSuccess"] as? Bool ?? self.leftIsSuccess
+            self.rightIsSuccess = userInfo["rightIsSuccess"] as? Bool ?? self.rightIsSuccess
             
-            if self.leftIsSuccess == true {
-                self.leftNum += 1
+            if userInfo["leftIsSuccess"] != nil {
+                if self.leftIsSuccess == true {
+                    self.leftNum += 1
+                }
             }
-            if self.rightIsSuccess == true {
-                self.rightNum += 1
+            if userInfo["rightIsSuccess"] != nil {
+                if self.rightIsSuccess == true {
+                    self.rightNum += 1
+                }
             }
 //            if self.isSuccess == true {
 //                self.num += 1
