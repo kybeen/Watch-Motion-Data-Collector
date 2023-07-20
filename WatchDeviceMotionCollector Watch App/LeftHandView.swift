@@ -147,8 +147,9 @@ extension LeftHandView {
         }
         
         // 모션 갱신 주기 설정 (몇 초마다 모션 데이터를 업데이트 할 지)
-        motionManager.deviceMotionUpdateInterval = TimeInterval(1 / watchViewModel.hzValue)
-        print("모션 갱신 주기 설정 : \(watchViewModel.hzValue)Hz -> \(String(format: "%.2f", 1/watchViewModel.hzValue))")
+        let UPDATE_INTERVAL = 1.0 / Double(watchViewModel.hzValue)
+        motionManager.deviceMotionUpdateInterval = UPDATE_INTERVAL
+        print("모션 갱신 주기 설정 : \(watchViewModel.hzValue)Hz -> \(motionManager.deviceMotionUpdateInterval)")
         var startTime: TimeInterval = 0.0 //MARK: 시작 시간 저장 변수
         // Device Motion 업데이트 받기 시작
         motionManager.startDeviceMotionUpdates(to: queue) { (data, error) in

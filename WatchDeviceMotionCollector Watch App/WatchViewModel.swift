@@ -170,7 +170,7 @@ class WatchViewModel: NSObject, WCSessionDelegate, ObservableObject {
         session.activate()
     }
 
-    @Published var hzValue = 100
+    @Published var hzValue = 50
 //    @Published var isSuccess = false
 //    @Published var num = 1
     @Published var leftIsSuccess = false
