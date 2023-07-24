@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B84F4DAA2A63E8DD0030A93C /* DetectingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84F4DA92A63E8DD0030A93C /* DetectingView.swift */; };
 		B84F4DAE2A6470630030A93C /* SavedCSVFilesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84F4DAD2A6470630030A93C /* SavedCSVFilesView.swift */; };
 		B8FEBA2D2A59934E00EB6464 /* DeviceMotionCollectorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8FEBA2C2A59934E00EB6464 /* DeviceMotionCollectorApp.swift */; };
 		B8FEBA2F2A59934E00EB6464 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8FEBA2E2A59934E00EB6464 /* ContentView.swift */; };
@@ -20,8 +19,8 @@
 		B8FEBA4B2A59936A00EB6464 /* WatchDeviceMotionCollector Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = B8FEBA3E2A59936800EB6464 /* WatchDeviceMotionCollector Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B8FEBA512A59D33C00EB6464 /* PhoneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8FEBA502A59D33C00EB6464 /* PhoneViewModel.swift */; };
 		B8FEBA532A59D34A00EB6464 /* WatchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8FEBA522A59D34A00EB6464 /* WatchViewModel.swift */; };
-		B8FEBA552A5AFC2600EB6464 /* LeftHandView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8FEBA542A5AFC2600EB6464 /* LeftHandView.swift */; };
-		B8FEBA572A5AFC6800EB6464 /* RightHandView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8FEBA562A5AFC6800EB6464 /* RightHandView.swift */; };
+		B8FEBA552A5AFC2600EB6464 /* ForehandView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8FEBA542A5AFC2600EB6464 /* ForehandView.swift */; };
+		B8FEBA572A5AFC6800EB6464 /* BackhandView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8FEBA562A5AFC6800EB6464 /* BackhandView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,7 +48,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		B84F4DA92A63E8DD0030A93C /* DetectingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectingView.swift; sourceTree = "<group>"; };
 		B84F4DAD2A6470630030A93C /* SavedCSVFilesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedCSVFilesView.swift; sourceTree = "<group>"; };
 		B8FEBA292A59934E00EB6464 /* DeviceMotionCollector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeviceMotionCollector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8FEBA2C2A59934E00EB6464 /* DeviceMotionCollectorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceMotionCollectorApp.swift; sourceTree = "<group>"; };
@@ -63,8 +61,8 @@
 		B8FEBA472A59936A00EB6464 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		B8FEBA502A59D33C00EB6464 /* PhoneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneViewModel.swift; sourceTree = "<group>"; };
 		B8FEBA522A59D34A00EB6464 /* WatchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchViewModel.swift; sourceTree = "<group>"; };
-		B8FEBA542A5AFC2600EB6464 /* LeftHandView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftHandView.swift; sourceTree = "<group>"; };
-		B8FEBA562A5AFC6800EB6464 /* RightHandView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightHandView.swift; sourceTree = "<group>"; };
+		B8FEBA542A5AFC2600EB6464 /* ForehandView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForehandView.swift; sourceTree = "<group>"; };
+		B8FEBA562A5AFC6800EB6464 /* BackhandView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackhandView.swift; sourceTree = "<group>"; };
 		B8FEBA582A5C181000EB6464 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -134,9 +132,8 @@
 				B8FEBA522A59D34A00EB6464 /* WatchViewModel.swift */,
 				B8FEBA442A59936A00EB6464 /* Assets.xcassets */,
 				B8FEBA462A59936A00EB6464 /* Preview Content */,
-				B8FEBA542A5AFC2600EB6464 /* LeftHandView.swift */,
-				B8FEBA562A5AFC6800EB6464 /* RightHandView.swift */,
-				B84F4DA92A63E8DD0030A93C /* DetectingView.swift */,
+				B8FEBA542A5AFC2600EB6464 /* ForehandView.swift */,
+				B8FEBA562A5AFC6800EB6464 /* BackhandView.swift */,
 			);
 			path = "WatchDeviceMotionCollector Watch App";
 			sourceTree = "<group>";
@@ -263,11 +260,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				B8FEBA432A59936800EB6464 /* ContentView.swift in Sources */,
-				B8FEBA552A5AFC2600EB6464 /* LeftHandView.swift in Sources */,
-				B84F4DAA2A63E8DD0030A93C /* DetectingView.swift in Sources */,
+				B8FEBA552A5AFC2600EB6464 /* ForehandView.swift in Sources */,
 				B8FEBA412A59936800EB6464 /* WatchDeviceMotionCollectorApp.swift in Sources */,
 				B8FEBA532A59D34A00EB6464 /* WatchViewModel.swift in Sources */,
-				B8FEBA572A5AFC6800EB6464 /* RightHandView.swift in Sources */,
+				B8FEBA572A5AFC6800EB6464 /* BackhandView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

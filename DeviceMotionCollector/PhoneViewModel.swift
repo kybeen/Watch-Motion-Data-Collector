@@ -18,10 +18,10 @@ class PhoneViewModel: NSObject, WCSessionDelegate, ObservableObject {
     }
 
     @Published var csvFileName = ""
-    @Published var handType = "left_"
+    @Published var swingType = "forehand_"
     @Published var isSucceeded = "Fail..."
-    @Published var leftSavedCSV: [String] = []
-    @Published var rightSavedCSV: [String] = []
+    @Published var forehandSavedCSV: [String] = []
+    @Published var backhandSavedCSV: [String] = []
     
     //MARK: 델리게이트 메서드 3개 정의
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
@@ -46,9 +46,9 @@ class PhoneViewModel: NSObject, WCSessionDelegate, ObservableObject {
         DispatchQueue.main.async {
             print("===========================================================")
             /* 전송된 파일의 메타데이터 확인 */
+            self.swingType = file.metadata?["swingType"] as? String ?? self.swingType
             self.csvFileName = file.metadata?["fileName"] as? String ?? "Unknown" // 파일명
             let fileName = file.metadata?["fileName"] as? String ?? "Unknown" // 파일명
-            self.handType = file.metadata?["hand"] as? String ?? "Unknown"
 //            let tempURL = file.fileURL // 전송된 파일의 임시 경로
 
             /* 파일을 저장할 경로 설정 */
@@ -56,10 +56,10 @@ class PhoneViewModel: NSObject, WCSessionDelegate, ObservableObject {
             let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0] // documents 디렉토리 경로 (계속 바뀌기 때문에 새로 불러와야 함)
             print("documentsURL: \(documentsURL)")
             var directoryName = "DeviceMotionData" // 디렉토리명
-            if self.handType == "left_" {
-                directoryName += "/Lefthand"
+            if self.swingType == "forehand_" {
+                directoryName += "/Forehand"
             } else {
-                directoryName += "/Righthand"
+                directoryName += "/Backhand"
             }
             /* 디렉토리 만들기 */
             let directoryURL = documentsURL.appendingPathComponent(directoryName)
@@ -83,20 +83,20 @@ class PhoneViewModel: NSObject, WCSessionDelegate, ObservableObject {
                 print("Received and saved CSV file!!! : \(csvURL)")
                 self.isSucceeded = "Success!!!"
 //                session.transferUserInfo(["isSuccess": true])
-                if self.handType == "left_" {
-                    session.transferUserInfo(["leftIsSuccess": true])
+                if self.swingType == "forehand_" {
+                    session.transferUserInfo(["forehandIsSuccess": true])
                 } else {
-                    session.transferUserInfo(["rightIsSuccess": true])
+                    session.transferUserInfo(["backhandIsSuccess": true])
                 }
             } catch {
                 // 파일 이동 실패
                 print("Failed to save received CSV file. : \(error.localizedDescription)")
                 self.isSucceeded = "Fail..."
 //                session.transferUserInfo(["isSuccess": false])
-                if self.handType == "left_" {
-                    session.transferUserInfo(["leftIsSuccess": false])
+                if self.swingType == "forehand_" {
+                    session.transferUserInfo(["forehandIsSuccess": false])
                 } else {
-                    session.transferUserInfo(["rightIsSuccess": false])
+                    session.transferUserInfo(["backhandIsSuccess": false])
                 }
             }
             // 저장된 항목들 확인
@@ -106,10 +106,10 @@ class PhoneViewModel: NSObject, WCSessionDelegate, ObservableObject {
             } catch {
                 print("[Error] : \(error.localizedDescription)")
             }
-            if self.handType == "left_" {
-                self.leftSavedCSV = fileList.sorted()
+            if self.swingType == "forehand_" {
+                self.forehandSavedCSV = fileList.sorted()
             } else {
-                self.rightSavedCSV = fileList.sorted()
+                self.backhandSavedCSV = fileList.sorted()
             }
         }
     }

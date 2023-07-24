@@ -13,12 +13,13 @@ struct ContentView: View {
     
     @State private var selectedFrequency = 4
     let HzOptions = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    @State var testerName = ""
     @State private var csvFolderIndex = 0
-    @State private var leftSelectedCSVFiles: [String] = [] // 선택된 파일들 (삭제용)
-    @State private var rightSelectedCSVFiles: [String] = [] // 선택된 파일들 (삭제용)
+    @State private var forehandSelectedCSVFiles: [String] = [] // 선택된 파일들 (삭제용)
+    @State private var backhandSelectedCSVFiles: [String] = [] // 선택된 파일들 (삭제용)
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading) { 
             //MARK: Frequency 선택
             HStack(alignment: .top) {
                 Text("Frequency select").font(.title2).bold()
@@ -36,6 +37,19 @@ struct ContentView: View {
                     phoneViewModel.session.transferUserInfo(["hz": self.HzOptions[selectedFrequency]])
                 } label: {
                     Image(systemName: "arrow.clockwise").bold()
+                }
+            }
+            .padding()
+            
+            //MARK: 테스터 이름 입력 (파일명에 반영됨)
+            HStack {
+                Text("Tester name").font(.title2).bold()
+                Spacer()
+                TextField("Enter name", text: $testerName).textFieldStyle(.roundedBorder)
+                    .frame(width: UIScreen.main.bounds.width*0.3)
+                Button("Done") {
+                    print("이름 입력: \(self.testerName)")
+                    phoneViewModel.session.transferUserInfo(["testerName": self.testerName])
                 }
             }
             .padding()
@@ -77,22 +91,22 @@ struct ContentView: View {
                         .bold()
                 }
                 Picker("CSV Folder", selection: $csvFolderIndex) {
-                    Text("Left").tag(0)
-                    Text("Right").tag(1)
+                    Text("Forehand").tag(0)
+                    Text("Backhand").tag(1)
                 }
                 .pickerStyle(.segmented)
   
                 //MARK: 저장된 파일 목록
                 if csvFolderIndex == 0 {
                     SavedCSVFilesView(
-                        savedCSVFiles: $phoneViewModel.leftSavedCSV,
-                        selectedCSVFiles: $leftSelectedCSVFiles,
+                        savedCSVFiles: $phoneViewModel.forehandSavedCSV,
+                        selectedCSVFiles: $forehandSelectedCSVFiles,
                         hand: "left"
                     )
                 } else {
                     SavedCSVFilesView(
-                        savedCSVFiles: $phoneViewModel.rightSavedCSV,
-                        selectedCSVFiles: $rightSelectedCSVFiles,
+                        savedCSVFiles: $phoneViewModel.backhandSavedCSV,
+                        selectedCSVFiles: $backhandSelectedCSVFiles,
                         hand: "right"
                     )
                 }
@@ -114,27 +128,27 @@ extension ContentView {
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0] // documents 디렉토리 경로 (계속 바뀌기 때문에 새로 불러와야 함)
         print("documentsURL: \(documentsURL)")
         let directoryName = "DeviceMotionData" // 디렉토리명
-        let leftDirectoryURL = documentsURL.appendingPathComponent(directoryName).appendingPathComponent("Lefthand")
-        let rightDirectoryURL = documentsURL.appendingPathComponent(directoryName).appendingPathComponent("Righthand")
+        let forehandDirectoryURL = documentsURL.appendingPathComponent(directoryName).appendingPathComponent("Forehand")
+        let backhandDirectoryURL = documentsURL.appendingPathComponent(directoryName).appendingPathComponent("Backhand")
         
         // 저장된 항목들 확인
-        var leftFileList : [String] = []
-        var rightFileList : [String] = []
+        var forehandFileList : [String] = []
+        var backhandFileList : [String] = []
         do {
-            leftFileList = try FileManager.default.contentsOfDirectory(atPath: leftDirectoryURL.path)
+            forehandFileList = try FileManager.default.contentsOfDirectory(atPath: forehandDirectoryURL.path)
         }
         catch {
             print("[Error] : \(error.localizedDescription)")
         }
-        phoneViewModel.leftSavedCSV = leftFileList.sorted()
+        phoneViewModel.forehandSavedCSV = forehandFileList.sorted()
         
         do {
-            rightFileList = try FileManager.default.contentsOfDirectory(atPath: rightDirectoryURL.path)
+            backhandFileList = try FileManager.default.contentsOfDirectory(atPath: backhandDirectoryURL.path)
         }
         catch {
             print("[Error] : \(error.localizedDescription)")
         }
-        phoneViewModel.rightSavedCSV = rightFileList.sorted()
+        phoneViewModel.backhandSavedCSV = backhandFileList.sorted()
     }
 }
 

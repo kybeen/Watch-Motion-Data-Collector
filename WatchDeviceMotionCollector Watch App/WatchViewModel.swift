@@ -171,12 +171,13 @@ class WatchViewModel: NSObject, WCSessionDelegate, ObservableObject {
     }
 
     @Published var hzValue = 50
+    @Published var testerName = ""
 //    @Published var isSuccess = false
 //    @Published var num = 1
-    @Published var leftIsSuccess = false
-    @Published var rightIsSuccess = false
-    @Published var leftNum = 1
-    @Published var rightNum = 1
+    @Published var forehandIsSuccess = false
+    @Published var backhandIsSuccess = false
+    @Published var forehandNum = 1
+    @Published var backhandNum = 1
 
     //MARK: 델리게이트 메서드
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
@@ -187,18 +188,19 @@ class WatchViewModel: NSObject, WCSessionDelegate, ObservableObject {
         DispatchQueue.main.async {
             // 받아온 데이터 저장
             self.hzValue = userInfo["hz"] as? Int ?? self.hzValue
+            self.testerName = userInfo["testerName"] as? String ?? self.testerName
 //            self.isSuccess = userInfo["isSuccess"] as? Bool ?? false
-            self.leftIsSuccess = userInfo["leftIsSuccess"] as? Bool ?? self.leftIsSuccess
-            self.rightIsSuccess = userInfo["rightIsSuccess"] as? Bool ?? self.rightIsSuccess
+            self.forehandIsSuccess = userInfo["forehandIsSuccess"] as? Bool ?? self.forehandIsSuccess
+            self.backhandIsSuccess = userInfo["backhandIsSuccess"] as? Bool ?? self.backhandIsSuccess
             
-            if userInfo["leftIsSuccess"] != nil {
-                if self.leftIsSuccess == true {
-                    self.leftNum += 1
+            if userInfo["forehandIsSuccess"] != nil {
+                if self.forehandIsSuccess == true {
+                    self.forehandNum += 1
                 }
             }
-            if userInfo["rightIsSuccess"] != nil {
-                if self.rightIsSuccess == true {
-                    self.rightNum += 1
+            if userInfo["backhandIsSuccess"] != nil {
+                if self.backhandIsSuccess == true {
+                    self.backhandNum += 1
                 }
             }
 //            if self.isSuccess == true {

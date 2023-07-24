@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreMotion
 
-struct RightHandView: View {
+struct BackhandView: View {
     let motionManager = CMMotionManager()
     @ObservedObject var watchViewModel: WatchViewModel
     
@@ -17,119 +17,91 @@ struct RightHandView: View {
     //MARK: 동작 상태, 저장될 파일명 등에 대한 정보
     @State private var isUpdating = false
     @State var isSentCSV = false
-    @State var isRightShowingGuide = true
     @Binding var selectedTab: Int
     @State var csvString = ""
-    @State var activityType = "forehand_"
-    @State var activityLabel = "포핸드"
-    @State var handType = "right_"
+    @State var swingType = "backhand_"
+    @State var swingLabel = "백핸드"
 //    @State var num = 1
     @State var isDetecting = true
     @State var isShowingModal = false // 저장하기 전 한 번 더 확인하기 위한 메세지
     
     var body: some View {
-        if isRightShowingGuide {
-            Text("애플워치를 오른손에 착용해주세요.").font(.largeTitle).bold()
-                .onTapGesture {
-                    isRightShowingGuide = false
-                    selectedTab = 2
-                }
-        } else {
-            VStack {
-                //MARK: 저장될 파일명 / 모션 데이터 frequency / 경과 시간 확인
-                Text("\(handType)\(activityType)\(watchViewModel.rightNum).csv").bold()
-                HStack {
-                    Text("\(watchViewModel.hzValue)Hz - ").bold().foregroundColor(.indigo)
-                    Text("\(timestamp)") // 타임스탬프
-                }
-                HStack {
-                    //MARK: 저장 파일명 번호 설정
-                    Button("-") {
-                        if watchViewModel.rightNum > 1 {
-                            watchViewModel.rightNum -= 1
-                        }
-                    }.frame(width: 50, height: 50)
-                    Text("\(watchViewModel.rightNum)")
-                    Button("+") {
-                        watchViewModel.rightNum += 1
-                    }.frame(width: 50, height: 50)
-                }
-                HStack {
-                    //MARK: 자세 선택 버튼
-                    Button(activityLabel) {
-                        if activityType == "forehand_" {
-                            activityType = "backhand_"
-                            activityLabel = "백핸드"
-                            watchViewModel.rightNum = 1
-                        }
-                        else {
-                            activityType = "forehand_"
-                            activityLabel = "포핸드"
-                            watchViewModel.rightNum = 1
-                        }
+        VStack {
+            //MARK: 저장될 파일명 / 모션 데이터 frequency / 경과 시간 확인
+            Text("\(watchViewModel.testerName)_\(swingType)\(watchViewModel.backhandNum).csv").bold()
+            HStack {
+                Text("\(watchViewModel.hzValue)Hz - ").bold().foregroundColor(.indigo)
+                Text("\(timestamp)") // 타임스탬프
+            }
+            HStack {
+                //MARK: 저장 파일명 번호 설정
+                Button("-") {
+                    if watchViewModel.backhandNum > 1 {
+                        watchViewModel.backhandNum -= 1
                     }
-                    .foregroundColor(activityType=="forehand_" ? .orange : .purple)
-                    
-                    if isUpdating {
-                        //MARK: 기록 중료 버튼
-                        Button("Stop") {
-                            stopRecording()
-                            isUpdating = false
-                            isDetecting = false
-                            isShowingModal = true
-                        }.foregroundColor(.red)
-                    }
-                    else {
-                        //MARK: 기록 시작 버튼
-                        Button("Start") {
-                            startRecording()
-                            isUpdating = true
-                            isSentCSV = false
-                            isDetecting = true
-                        }.foregroundColor(.green)
-                    }
-                }
-                
-                HStack {
-                    Text("오른손잡이").foregroundColor(.purple).font(.headline).bold()
-                    //MARK: 전송 완료 시 전송완료 메세지
-                    if isSentCSV {
-                        HStack {
-                            if isDetecting == false {
-                                Text("전송!").bold().foregroundColor(.blue)
-                                if watchViewModel.rightIsSuccess {
-                                    Text("성공").bold().foregroundColor(.green)
-                                } else {
-                                    Text("실패").bold().foregroundColor(.red)
-                                }
+                }.frame(width: 50, height: 50)
+                Text("\(watchViewModel.backhandNum)")
+                Button("+") {
+                    watchViewModel.backhandNum += 1
+                }.frame(width: 50, height: 50)
+            }
+            //MARK: 기록 시작/종료 버튼
+            if isUpdating {
+                Button("Stop") {
+                    stopRecording()
+                    isUpdating = false
+                    isDetecting = false
+                    isShowingModal = true
+                }.foregroundColor(.red)
+            }
+            else {
+                Button("Start") {
+                    startRecording()
+                    isUpdating = true
+                    isSentCSV = false
+                    isDetecting = true
+                }.foregroundColor(.green)
+            }
+            
+            HStack {
+                Text("백핸드").foregroundColor(.purple).font(.headline).bold()
+                //MARK: 전송 완료 시 전송완료 메세지
+                if isSentCSV {
+                    HStack {
+                        if isDetecting == false {
+                            Text("전송!").bold().foregroundColor(.blue)
+                            if watchViewModel.backhandIsSuccess {
+                                Text("성공").bold().foregroundColor(.green)
+                            } else {
+                                Text("실패").bold().foregroundColor(.red)
                             }
                         }
                     }
                 }
             }
-            .padding()
-            .fullScreenCover(isPresented: $isShowingModal) {
-                VStack {
-                    Text("정말로 저장하시겠습니까?")
-                    Button {
-                        isShowingModal = false
-                        // .csv 파일로 만들고 전송
-                        saveAndSendToCSV()
-                    } label: {
-                        Text("네")
-                    }
-                    Button {
-                        isShowingModal = false
-                    } label: {
-                        Text("아니오").foregroundColor(.red)
-                    }
+        }
+        .padding()
+        .fullScreenCover(isPresented: $isShowingModal) {
+            VStack {
+                Text("정말로 저장하시겠습니까?")
+                Button {
+                    isShowingModal = false
+                    // .csv 파일로 만들고 전송
+                    saveAndSendToCSV()
+                } label: {
+                    Text("네")
+                }
+                Button {
+                    isShowingModal = false
+                } label: {
+                    Text("아니오").foregroundColor(.red)
                 }
             }
         }
     }
 }
 
-extension RightHandView {
+extension BackhandView {
     //MARK: Device Motion 레코딩 시작 함수
     func startRecording() {
         self.csvString = "Time Stamp,Acceleration X,Acceleration Y,Acceleration Z,Rotation Rate X,Rotation Rate Y,Rotation Rate Z\n"
@@ -182,7 +154,7 @@ extension RightHandView {
         // 폴더명 설정
         let folderName = "DeviceMotionData"
         // 파일명 설정
-        let csvFileName = self.handType + self.activityType + String(watchViewModel.rightNum) + ".csv"
+        let csvFileName = watchViewModel.testerName + "_" + self.swingType + String(watchViewModel.backhandNum) + ".csv"
 
         //MARK: 폴더 생성
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -213,14 +185,14 @@ extension RightHandView {
         }
         
         //MARK: CSV 파일 아이폰으로 전송
-        watchViewModel.session.transferFile(csvURL, metadata: ["activity": activityType, "hand": handType, "fileName": csvFileName])
+        watchViewModel.session.transferFile(csvURL, metadata: ["swingType": swingType, "fileName": csvFileName])
         print("CSV파일이 아이폰으로 전송됨!!!")
         isSentCSV = true
     }
 }
 //
-//struct RightHandView_Previews: PreviewProvider {
+//struct BackhandView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        RightHandView()
+//        BackhandView()
 //    }
 //}
