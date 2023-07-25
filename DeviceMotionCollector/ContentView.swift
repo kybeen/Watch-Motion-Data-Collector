@@ -101,13 +101,13 @@ struct ContentView: View {
                     SavedCSVFilesView(
                         savedCSVFiles: $phoneViewModel.forehandSavedCSV,
                         selectedCSVFiles: $forehandSelectedCSVFiles,
-                        hand: "left"
+                        swingType: "forehand"
                     )
                 } else {
                     SavedCSVFilesView(
                         savedCSVFiles: $phoneViewModel.backhandSavedCSV,
                         selectedCSVFiles: $backhandSelectedCSVFiles,
-                        hand: "right"
+                        swingType: "backhand"
                     )
                 }
             }
