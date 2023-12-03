@@ -4,6 +4,7 @@
 
 ### ⌚️ watchOS
 - ✅ 애플워치에서 데이터 수집 시작 버튼을 누르면 Core Motion 프레임워크를 활용해 애플워치의 Device Motion 센서값을 트래킹하며 저장합니다.
+
   <img width="250" alt="image" src="https://github.com/kybeen/Watch-Motion-Data-Collector/assets/89764127/0601aee9-8e36-4c57-b34e-966b87e2735a">
 
 
